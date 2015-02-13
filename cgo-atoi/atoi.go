@@ -17,3 +17,13 @@ func Direct(b []byte) (uint16, error) {
 	}
 	return ret, nil
 }
+
+func DirectShift(b []byte) (uint16, error) {
+	ret, c, k := uint16(0), byte(0), uint16(0)
+	for _, c = range b {
+		k = ret<<1 + uint16(c-'0')
+		ret <<= 3
+		ret += k
+	}
+	return ret, nil
+}

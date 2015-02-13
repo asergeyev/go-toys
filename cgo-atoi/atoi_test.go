@@ -19,6 +19,10 @@ func TestAtoi(t *testing.T) {
 	if uint16(i1) != i3 {
 		t.Errorf("Answer from ParseBytes is different than from Go version (%d)", i3)
 	}
+	i4, _ := DirectShift(buf[:5])
+	if uint16(i1) != i4 {
+		t.Errorf("Answer from ParseBytes is different than from Go shift version (%d)", i3)
+	}
 }
 
 func BenchmarkGo(b *testing.B) {
@@ -36,5 +40,11 @@ func BenchmarkC(b *testing.B) {
 func BenchmarkDirect(b *testing.B) {
 	for n := 0; n < b.N; n++ {
 		Direct(buf)
+	}
+}
+
+func BenchmarkDirectShift(b *testing.B) {
+	for n := 0; n < b.N; n++ {
+		DirectShift(buf)
 	}
 }
