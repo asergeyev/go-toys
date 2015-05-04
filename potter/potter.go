@@ -1,5 +1,4 @@
-// potter - small personal toy project, abstract map[[]byte]uint64 implementation... Feel free to use uint64 for storing unsafe pointers.
-// Imagined for relatively large amounts of byte values and no expectation of iterating over them.
+// potter - small personal toy project, abstract map[[]byte]uint32 implementation...
 package potter
 
 import (
