@@ -14,15 +14,25 @@ var ln = int(5)
 func TestItoa(t *testing.T) {
 	var err error
 
+	buf := make([]byte, ln)
+
+	for n := uint16(0); n < num; n++ {
+		ln, err = NumToBuf(n, buf)
+		if answer := []byte(strconv.FormatInt(int64(n), 10)); len(answer) != ln || !bytes.Equal(buf[:ln], answer) {
+			t.Errorf("Invalid value returned for %d value: '%s'!='%s'", n, buf[:ln], answer)
+		}
+	}
+
 	rand.Seed(int64(time.Now().Nanosecond()))
 	num = uint16(rand.Uint32())
 	str := strconv.FormatUint(uint64(num), 10)
 	answer := []byte(str)
-	buf := make([]byte, len(answer)+1)
+
 	ln, err = NumToBuf(num, buf)
 	if err != nil {
 		t.Error(err)
 	}
+
 	if ln != len(answer) {
 		t.Error("Wrong number of bytes returned")
 	}
@@ -33,8 +43,6 @@ func TestItoa(t *testing.T) {
 		t.Error("Shorter buf should've returned error!")
 	}
 }
-
-
 
 func BenchmarkGo(b *testing.B) {
 	var str string
