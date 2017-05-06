@@ -1,0 +1,14 @@
+*
+!bits
+!cgo-atoi
+!floats
+!itoa
+!loadip
+!mapaccess
+!p95
+!potter
+!pvsi
+!reuse
+!structsort
+!README.md
+!.gitignore
