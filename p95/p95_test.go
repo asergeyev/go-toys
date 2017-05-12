@@ -45,7 +45,7 @@ func find95(s []float64) float64 {
 	return x[0]*(1-y) + x[1]*y
 }
 
-const NUM = 120
+const NUM = 500
 
 func TestP95Correctness(t *testing.T) {
 	test := make([]float64, NUM)
@@ -54,7 +54,7 @@ func TestP95Correctness(t *testing.T) {
 		pu := find95usual(test[:i])
 		pf := find95(test[:i])
 		if math.Abs(pu-pf) > 0.00001 {
-			t.Errorf("Incorrect p95, %.4f != %.4f\nN %d %v", pu, pf, i, test[:i])
+			t.Errorf("Incorrect p95, %.5f != %.4f\nN %d %v", pu, pf, i, test[:i])
 		}
 	}
 }
@@ -66,8 +66,8 @@ func BenchmarkP95Usual(b *testing.B) {
 	}
 	for i := 0; i < b.N; i++ {
 		p := find95usual(test)
-		if math.Abs(p-11.3050) > 0.00001 {
-			b.Fatalf("Incorrect p95, %.4f\nN %d %v", p, NUM, test)
+		if math.Abs(p-47.4050) > 0.00001 {
+			b.Fatalf("Incorrect p95, %.5f\nN %d %v", p, NUM, test)
 		}
 	}
 }
@@ -79,8 +79,8 @@ func BenchmarkP95Short(b *testing.B) {
 	}
 	for i := 0; i < b.N; i++ {
 		p := find95(test)
-		if math.Abs(p-11.3050) > 0.00001 {
-			b.Fatalf("Incorrect p95, %.4f\nN %d %v", p, NUM, test)
+		if math.Abs(p-47.4050) > 0.00001 {
+			b.Fatalf("Incorrect p95, %.5f\nN %d %v", p, NUM, test)
 		}
 	}
 }
