@@ -45,7 +45,7 @@ func find95(s []float64) float64 {
 	return x[0]*(1-y) + x[1]*y
 }
 
-const NUM = 500
+const NUM = 1500
 
 func TestP95Correctness(t *testing.T) {
 	test := make([]float64, NUM)
@@ -65,10 +65,7 @@ func BenchmarkP95Usual(b *testing.B) {
 		test[i] = float64(i) / 10
 	}
 	for i := 0; i < b.N; i++ {
-		p := find95usual(test)
-		if math.Abs(p-47.4050) > 0.00001 {
-			b.Fatalf("Incorrect p95, %.5f\nN %d %v", p, NUM, test)
-		}
+		_ = find95usual(test)
 	}
 }
 
@@ -78,9 +75,6 @@ func BenchmarkP95Short(b *testing.B) {
 		test[i] = float64(i) / 10
 	}
 	for i := 0; i < b.N; i++ {
-		p := find95(test)
-		if math.Abs(p-47.4050) > 0.00001 {
-			b.Fatalf("Incorrect p95, %.5f\nN %d %v", p, NUM, test)
-		}
+		_ = find95(test)
 	}
 }
