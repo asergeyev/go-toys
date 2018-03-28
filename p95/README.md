@@ -1,4 +1,11 @@
-Attempt to create faster p95 calculation than just "sort array", get Nth element.
-Does not work on larger lists since building top (1-q) elements list is actually hard on CPU.
+p95_test.go
 
-Short version is faster up to around 1000 elements in the list (leading to top-N below 50).
+Attempt to create faster p95 calculation than just "sort array", get Nth element.
+Short version is kind of faster but not good if you can sort in place.
+
+
+
+p95streaming_test.go
+
+check on many streaming algorithms to see how accurate they estimate p95.
+

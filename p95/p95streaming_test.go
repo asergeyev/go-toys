@@ -2,9 +2,7 @@ package p95
 
 import (
 	"fmt"
-	"math/rand"
 	"runtime"
-	"time"
 
 	vhist "github.com/VividCortex/gohistogram"
 	tdigest "github.com/caio/go-tdigest"
@@ -15,28 +13,6 @@ import (
 
 	"testing"
 )
-
-const NUMSTREAMING = 288 * 30 // much longer now
-
-var (
-	DUMP, TESTSET []float64
-	EXPECTED      float64
-)
-
-func init() {
-	if len(DUMP) > 0 { // needs test data file with values
-		TESTSET = DUMP
-	} else {
-		TESTSET = make([]float64, NUMSTREAMING)
-		rand.Seed(int64(time.Now().Nanosecond()))
-	}
-	for i := 0; i < NUMSTREAMING; i++ {
-		// we assume distribution has no impact on quality of streaming eastimators
-		// range here is like 1-10GB
-		TESTSET[i] = float64(rand.Int63n(9E7)*100) + 1E9
-	}
-	EXPECTED = find95usual(TESTSET)
-}
 
 func TestVividcortexP95Correctness(t *testing.T) {
 	runtime.ReadMemStats(m)
