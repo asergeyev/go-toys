@@ -113,7 +113,7 @@ func TestKLLP95Correctness(t *testing.T) {
 func TestTDigestP95Correctness(t *testing.T) {
 	runtime.ReadMemStats(m)
 	before := m.TotalAlloc
-	var x, _ = tdigest.New(tdigest.Compression(200))
+	var x, _ = tdigest.New(tdigest.Compression(150))
 	for _, v := range TESTSET {
 		x.Add(v)
 	}
@@ -122,5 +122,5 @@ func TestTDigestP95Correctness(t *testing.T) {
 	runtime.ReadMemStats(m)
 	diff := p95 - EXPECTED
 
-	t.Logf("Error in tdigest-190 estimation: %.0f   %d allocated", diff, m.TotalAlloc-before)
+	t.Logf("Error in tdigest-150 estimation: %.0f   %d allocated", diff, m.TotalAlloc-before)
 }

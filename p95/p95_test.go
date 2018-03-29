@@ -29,8 +29,8 @@ func find95short(s []float64) float64 {
 	pos := int(discard)
 
 	x := make([]float64, (pos+1)*2+pos/5) // a cut with 5% of elements and padding for rest of them, pos/5 helps with extra coupls spots on big arrays
-	copy(x, s[0:len(x)])
-	sort.Sort(sort.Reverse(sort.Float64Slice(x)))
+	n := copy(x, s)                       // move as many as we can at first
+	sort.Sort(sort.Reverse(sort.Float64Slice(x[:n])))
 
 	if len(s) > len(x) {
 		fill, edge := pos+1, x[pos+1]
@@ -54,7 +54,7 @@ func find95short(s []float64) float64 {
 }
 
 func TestP95Correctness(t *testing.T) {
-	for i := 257; i < 258; i++ {
+	for i := 1; i < NUM; i *= 2 { // speed things up, test few good cases (1,2,4...512)
 		pu := find95usual(TESTSET[:i:i])
 		pf := find95short(TESTSET[:i:i])
 		if math.Abs(pu-pf) > 0.00001 {

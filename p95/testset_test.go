@@ -6,9 +6,9 @@ import (
 )
 
 const (
-	NUM              = 8000
-	NUMSTREAMING     = 30000 // much longer now
-	NOTDETERMINISTIC = false
+	NUM           = 512
+	NUMSTREAMING  = 30000 // much longer now
+	DETERMINISTIC = true
 )
 
 var (
@@ -19,11 +19,11 @@ var (
 func init() {
 	// yes, confusing but I know what's happening here...
 	//
-	if !NOTDETERMINISTIC && len(DUMP) > 0 { // needs test data file with values in init()
+	if DETERMINISTIC && len(DUMP) > 0 { // needs test data file with values in init()
 		TESTSET = DUMP
 	} else {
 		TESTSET = make([]float64, NUMSTREAMING)
-		if NOTDETERMINISTIC {
+		if !DETERMINISTIC {
 			rand.Seed(int64(time.Now().Nanosecond()))
 		}
 		for i := 0; i < NUMSTREAMING; i++ {
@@ -32,5 +32,6 @@ func init() {
 			TESTSET[i] = float64(rand.Int63n(9E7)*100) + 1E9
 		}
 	}
+
 	EXPECTED = find95usual(TESTSET)
 }
