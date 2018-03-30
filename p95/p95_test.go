@@ -35,7 +35,7 @@ func find95short(s []float64) float64 {
 	if len(s) > len(x) {
 		fill, edge := pos+1, x[pos+1]
 		for _, v := range s[len(x):] {
-			if v > edge {
+			if v > edge { // we only care about values bigger than current percentile candidate
 				x[fill] = v
 				fill++
 				if fill == len(x) {
