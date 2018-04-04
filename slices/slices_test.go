@@ -4,7 +4,7 @@ import (
 	"testing"
 )
 
-// let's try to see if it's fast to re-assign slice var
+// let's try to see if it's fast to re-assign slice var (spoiler alert: it is)
 
 var testbuf = make([]byte, 8192)
 
@@ -24,7 +24,6 @@ func BenchmarkSliceMove(b *testing.B) {
 		awkward := testbuf
 		for pos := 0; pos < len(testbuf)-4; pos += 4 {
 			test1, test2, test3, test4 := awkward[pos+1], awkward[pos+2], awkward[pos+3], awkward[pos+4] // about same work
-			pos++
 			_, _, _, _ = test1, test2, test3, test4
 		}
 	}
