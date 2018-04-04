@@ -9,7 +9,7 @@ import (
 func BenchmarkSliceReassign(b *testing.B) {
 	awkward := make([]byte, b.N+4)
 	for i := 0; i < b.N; i++ {
-		awkward := awkward[1:]
+		awkward = awkward[1:]
 		test1, test2, test3, test4 := awkward[0], awkward[1], awkward[2], awkward[3] // assume decoding uint32 from those
 		_, _, _, _ = test1, test2, test3, test4
 	}
