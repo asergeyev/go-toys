@@ -1,5 +1,7 @@
 package main
 
+// this clones an example from github.com/tormoder/fit
+
 import (
 	"bytes"
 	"fmt"
@@ -22,6 +24,7 @@ func main() {
 		fmt.Println(err)
 		return
 	}
+
 	// Get the actual activity
 	activity, err := fit.Activity()
 	if err != nil {
@@ -29,7 +32,6 @@ func main() {
 		return
 	}
 
-	// Print the latitude and longitude of the first Record message
 	prev := uint32(0)
 	total := uint32(0)
 	for _, record := range activity.Records {
@@ -38,8 +40,6 @@ func main() {
 		}
 		prev = record.Distance
 	}
-
-	// Print the sport of the first Session message
 
 	fmt.Println(total/160958, "mi above 100 rpm")
 	fmt.Println(prev/160958, "mi total")
