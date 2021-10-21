@@ -35,7 +35,7 @@ func main() {
 	prev := uint32(0)
 	total := uint32(0)
 	for _, record := range activity.Records {
-		if record.Cadence > 100 {
+		if record.Cadence >= 100 {
 			total += record.Distance - prev
 		}
 		prev = record.Distance
