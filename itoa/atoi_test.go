@@ -2,66 +2,78 @@ package itoa
 
 import (
 	"bytes"
+	"fmt"
 	"math/rand"
 	"strconv"
 	"testing"
 	"time"
 )
 
-var num = uint16(10000)
-var ln = int(5)
+var num = 1000000
 
-func TestItoa(t *testing.T) {
-	var err error
-
-	buf := make([]byte, ln)
-
-	for n := uint16(0); n < num; n++ {
-		ln, err = NumToBuf(n, buf)
-		if answer := []byte(strconv.FormatInt(int64(n), 10)); len(answer) != ln || !bytes.Equal(buf[:ln], answer) {
-			t.Errorf("Invalid value returned for %d value: '%s'!='%s'", n, buf[:ln], answer)
-		}
-	}
-
+func TestNumToBuf(t *testing.T) {
 	rand.Seed(int64(time.Now().Nanosecond()))
-	num = uint16(rand.Uint32())
-	str := strconv.FormatUint(uint64(num), 10)
-	answer := []byte(str)
 
-	ln, err = NumToBuf(num, buf)
-	if err != nil {
-		t.Error(err)
-	}
+	buf := make([]byte, 100)
+	test := make([]byte, 100)
 
-	if ln != len(answer) {
-		t.Error("Wrong number of bytes returned")
-	}
-	if !bytes.Equal(buf[:ln], answer) {
-		t.Errorf("%s (%d) != %s", buf[:ln], len(buf), answer)
-	}
-	if _, err = NumToBuf(num, buf[:ln-1]); err == nil {
-		t.Error("Shorter buf should've returned error!")
-	}
-}
-
-func BenchmarkGo(b *testing.B) {
-	var str string
-	var answer []byte
-	for n := 0; n < b.N; n++ {
-		str = strconv.FormatUint(uint64(num), 10)
-		answer = []byte(str)
-		if len(answer) != ln { // same check to make sure variables created
-			b.Error("Invalid answer")
+	for n := 0; n < num; n += int(rand.Int63n(10000)) {
+		ln, err := NumToBuf(uint64(n), buf)
+		if err != nil {
+			t.Errorf("Unable to convert %d, %s", n, err)
+		}
+		test = strconv.AppendUint(test[:0], uint64(n), 10)
+		if !bytes.Equal(buf[:ln], test) {
+			t.Errorf("%d gives error: %s != %s", n, string(buf[:ln]), test)
+			break
 		}
 	}
 }
 
-func BenchmarkNumToBuf(b *testing.B) {
+func BenchmarkItoa(b *testing.B) {
+	var str string
+	for n := 0; n < b.N; n++ {
+		str = strconv.Itoa(n)
+		_ = str
+	}
+}
+
+func BenchmarkFormat(b *testing.B) {
+	var str string
+	for n := 0; n < b.N; n++ {
+		str = strconv.FormatInt(int64(n), 10)
+		_ = str
+	}
+}
+
+func BenchmarkToBuf(b *testing.B) {
 	buf := make([]byte, 100)
 	for n := 0; n < b.N; n++ {
-		x, _ := NumToBuf(num, buf)
-		if x != ln { // same check to make sure variables created
-			b.Error("Invalid answer")
-		}
+		x, _ := NumToBuf(uint64(num), buf)
+		_ = x
+	}
+}
+
+func BenchmarkSprintf(b *testing.B) {
+	var str string
+	for n := 0; n < b.N; n++ {
+		str = fmt.Sprintf("%d", n)
+		_ = str
+	}
+}
+
+func BenchmarkSprint(b *testing.B) {
+	var str string
+	for n := 0; n < b.N; n++ {
+		str = fmt.Sprint(num)
+		_ = str
+	}
+}
+
+func BenchmarkAppend(b *testing.B) {
+	str := make([]byte, 0, 0)
+	for n := 0; n < b.N; n++ {
+		str = strconv.AppendInt(str[:0], int64(n), 10)
+		_ = str
 	}
 }
