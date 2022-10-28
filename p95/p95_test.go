@@ -4,6 +4,8 @@ import (
 	"math"
 	"sort"
 	"testing"
+
+	tdigest "github.com/caio/go-tdigest/v4"
 )
 
 func find95usual(s []float64) float64 {
@@ -53,6 +55,18 @@ func find95short(s []float64) float64 {
 	return x[pos]*(1-y) + x[pos+1]*y
 }
 
+func find95tdigest(s []float64) float64 {
+	if len(s) <= 1 {
+		return s[0]
+	}
+	x, _ := tdigest.New(tdigest.Compression(50))
+	for _, v := range s {
+		x.Add(v)
+	}
+
+	return x.Quantile(.95)
+}
+
 func TestP95Correctness(t *testing.T) {
 	for i := 1; i < NUM; i *= 2 { // speed things up, test few good cases (1,2,4...512)
 		pu := find95usual(TESTSET[:i:i])
@@ -72,5 +86,11 @@ func BenchmarkP95Usual(b *testing.B) {
 func BenchmarkP95Short(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		_ = find95short(TESTSET[:NUM:NUM])
+	}
+}
+
+func BenchmarkP95TDigest(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		_ = find95tdigest(TESTSET[:NUM:NUM])
 	}
 }
