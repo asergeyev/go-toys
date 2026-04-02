@@ -11,7 +11,7 @@ import (
 // bytes.NewBuffer is a read/write type that uses a separate head/tail offset.
 // Expectation: NewReader should be slightly cheaper for read-only workloads.
 
-var data = bytes.Repeat([]byte("abcdefghij"), 10000) // 1 KB
+var data = bytes.Repeat([]byte("abcdefghij"), 10000) // 10 MB
 
 func BenchmarkNewBufferCreate(b *testing.B) {
 	for i := 0; i < b.N; i++ {
